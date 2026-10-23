@@ -37,6 +37,20 @@ describe.each(ROLES)("menu for %s", (role) => {
     ]);
   });
 
+  it("names a permission on every item except Home (default deny)", () => {
+    const every = [
+      ...nav.sections.flatMap((section) => section.items),
+      ...nav.extras,
+    ];
+    for (const item of every) {
+      if (item.id === "home") expect(item.requires, "home").toBeNull();
+      else
+        expect(item.requires, item.id).toEqual(
+          expect.stringMatching(/^[a-z_]+\.[a-z_]+$/),
+        );
+    }
+  });
+
   it("has unique ids and a one-line purpose for every item", () => {
     const ids = items.map((i) => i.id);
     expect(new Set(ids).size).toBe(ids.length);

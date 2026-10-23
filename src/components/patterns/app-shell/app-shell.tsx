@@ -22,7 +22,7 @@ export function AppShell({
   /** Already filtered to what this person may use (see filterSections). */
   sections: NavSection[];
   mobileTabs: NavItem[];
-  inboxItem: NavItem;
+  inboxItem?: NavItem;
   activeId: string;
   /** Preview only: stay on the page instead of following the link. */
   onSelect?: (item: NavItem) => void;

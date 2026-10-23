@@ -3,7 +3,7 @@
 import * as React from "react";
 import { AppShell } from "@/components/patterns/app-shell/app-shell";
 import { PageHeader } from "@/components/patterns/page-header";
-import { EmptyState } from "@/components/patterns/states";
+import { EmptyState, NoAccessState } from "@/components/patterns/states";
 import { StatTile } from "@/components/patterns/stat-tile";
 import { Button } from "@/components/ui/button";
 import type { NavItem, NavSection } from "@/lib/nav/nav";
@@ -22,14 +22,16 @@ export function ShellPreview({
   userName: string;
   sections: NavSection[];
   mobileTabs: NavItem[];
-  inboxItem: NavItem;
+  inboxItem?: NavItem;
   stats: { label: string; value: string; hint?: string }[];
 }) {
-  const homeId = sections[0].items[0].id;
+  const homeId = sections[0]?.items[0]?.id ?? "";
   const [activeId, setActiveId] = React.useState(homeId);
+  // With no permitted menu items at all there is nothing to show; the hooks above still run first.
+  if (sections.length === 0) return <NoAccessState className="m-6" />;
   const everything = [
     ...sections.flatMap((s) => s.items),
-    inboxItem,
+    ...(inboxItem ? [inboxItem] : []),
     ...mobileTabs,
   ];
   const active =

@@ -85,6 +85,7 @@ export type PermissionKey = `${ModuleKey}.${Action}`;
 export function permissionsFor(role: Role): Set<PermissionKey> {
   const index = ROLES.indexOf(role);
   const granted = new Set<PermissionKey>();
+  if (index < 0) return granted; // default deny for anything that is not a known role
   for (const moduleKey of MODULES) {
     for (const action of (ROWS[moduleKey] as Row)[index]) {
       granted.add(`${moduleKey}.${action}` as PermissionKey);

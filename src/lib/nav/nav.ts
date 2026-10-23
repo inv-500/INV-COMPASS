@@ -45,8 +45,8 @@ export type NavItem = {
   icon: IconName;
   /** One line on what the place is for. Shown on the empty state while the screen is not built. */
   purpose: string;
-  /** Permission needed to see the item. Leave out for items every signed-in person has. */
-  requires?: PermissionKey;
+  /** Permission needed to see the item. Must be set on every item: null means every signed-in person (only Home). */
+  requires: PermissionKey | null;
 };
 
 export type NavSection = { label?: string; items: NavItem[] };
@@ -76,6 +76,7 @@ function common(role: Role, homeLabel = "Home", homePurpose?: string) {
     href: BASE[role],
     icon: "home",
     purpose: homePurpose ?? "What needs you now, in one place.",
+    requires: null,
   };
   const projects: NavItem = {
     id: "projects",
@@ -97,7 +98,7 @@ function common(role: Role, homeLabel = "Home", homePurpose?: string) {
   return { home, projects, tasks };
 }
 
-const INBOX: NavItem = {
+export const INBOX: NavItem = {
   id: "inbox",
   label: "Inbox",
   href: "/inbox",
@@ -615,7 +616,7 @@ export function filterSections(
     .map((section) => ({
       ...section,
       items: section.items.filter(
-        (item) => !item.requires || can(item.requires),
+        (item) => item.requires === null || can(item.requires),
       ),
     }))
     .filter((section) => section.items.length > 0);
@@ -631,7 +632,7 @@ export function resolveMobileTabs(
     .map((id) => all.find((item) => item.id === id))
     .filter(
       (item): item is NavItem =>
-        !!item && (!item.requires || can(item.requires)),
+        !!item && (item.requires === null || can(item.requires)),
     )
     .slice(0, 4);
 }

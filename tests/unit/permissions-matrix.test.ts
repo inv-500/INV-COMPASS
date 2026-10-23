@@ -8,6 +8,8 @@ import {
   ROLES,
   type Action,
   type ModuleKey,
+  type PermissionKey,
+  type Role,
 } from "@/lib/permissions/matrix";
 
 // The referee for docs/permissions.md section 2: the matrix in code must be the matrix in the doc.
@@ -28,7 +30,16 @@ const ACTIONS: Action[] = [
 function parseCell(cell: string): Action[] {
   const text = cell.replace(/\([^)]*\)/g, "").trim();
   if (text === "—") return [];
-  return ACTIONS.filter((action) => new RegExp(`\\b${action}\\b`).test(text));
+  // Every word must be a known action, so a typo in the doc or the code fails instead of reading as "none".
+  const words = text.split(/\s*\+\s*/);
+  for (const word of words) {
+    if (!(ACTIONS as string[]).includes(word)) {
+      throw new Error(
+        `Unrecognised permission "${word}" in the doc cell "${cell}"`,
+      );
+    }
+  }
+  return words as Action[];
 }
 
 function parseDocMatrix() {
@@ -68,6 +79,28 @@ describe("permissionsFor", () => {
     const designer = permissionsFor("designer");
     expect(designer.has("docket.edit")).toBe(true);
     expect(designer.has("docket.view")).toBe(true);
+  });
+
+  it("grants each money permission to exactly the roles in the doc's money table", () => {
+    const allowed = {
+      "boq.view": ["admin", "designer", "procurement"],
+      "cost_sheets.view": ["admin", "procurement"],
+      "work_order_rates.view": ["admin", "procurement", "vendor_team"],
+      "payments.view": ["admin"],
+      "financial_reports.view": ["admin"],
+    } as const;
+    for (const [key, roles] of Object.entries(allowed)) {
+      for (const role of ROLES) {
+        expect(
+          permissionsFor(role).has(key as PermissionKey),
+          `${role} / ${key}`,
+        ).toBe((roles as readonly string[]).includes(role));
+      }
+    }
+  });
+
+  it("denies everything to an unknown role", () => {
+    expect(permissionsFor("intruder" as Role).size).toBe(0);
   });
 
   it("keeps money away from everyone but the right roles", () => {

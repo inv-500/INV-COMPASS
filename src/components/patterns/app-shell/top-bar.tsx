@@ -24,7 +24,7 @@ export function TopBar({
 }: {
   breadcrumb: Crumb[];
   user: { name: string; roleLabel: string };
-  inboxItem: NavItem;
+  inboxItem?: NavItem;
   unreadCount?: number;
   onSelect?: (item: NavItem) => void;
   onToggleSidebar: () => void;
@@ -79,28 +79,30 @@ export function TopBar({
       </nav>
 
       <div className="ml-auto flex items-center gap-1">
-        <NavLink
-          item={inboxItem}
-          active={false}
-          onSelect={onSelect}
-          aria-label={
-            unreadCount > 0 ? `Inbox, ${unreadCount} unread` : "Inbox"
-          }
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "icon" }),
-            "relative",
-          )}
-        >
-          <Inbox className="size-5" aria-hidden="true" />
-          {unreadCount > 0 ? (
-            <span
-              aria-hidden="true"
-              className="tnum absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-xs font-medium text-primary-foreground"
-            >
-              {unreadCount}
-            </span>
-          ) : null}
-        </NavLink>
+        {inboxItem ? (
+          <NavLink
+            item={inboxItem}
+            active={false}
+            onSelect={onSelect}
+            aria-label={
+              unreadCount > 0 ? `Inbox, ${unreadCount} unread` : "Inbox"
+            }
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "icon" }),
+              "relative",
+            )}
+          >
+            <Inbox className="size-5" aria-hidden="true" />
+            {unreadCount > 0 ? (
+              <span
+                aria-hidden="true"
+                className="tnum absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-xs font-medium text-primary-foreground"
+              >
+                {unreadCount}
+              </span>
+            ) : null}
+          </NavLink>
+        ) : null}
         <UserMenu name={user.name} roleLabel={user.roleLabel} />
       </div>
     </header>
