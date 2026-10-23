@@ -16,22 +16,24 @@ The owner is a non-technical founder. Explain plans, trade-offs and results in p
 
 | Role | Owns |
 | --- | --- |
-| Admin | Users, roles, permissions, projects, payments, masters, reports |
-| Designer | Client brief, concept, BOQ, client approvals, docket, QC, handover. Can **view every module** by default (edit only where listed in `/docs/permissions.md`) |
-| GFC | Final measurements review, GFC drawings, BOM, release to production |
-| Procurement | Bought-in goods and factory raw materials: quotes, POs, expediting, inward inspection, inventory |
-| Vendor team | Outsourced services: work orders, vendor scheduling, progress verification, vendor bills |
-| Factory | Downstream of GFC and Procurement: receives released items (with GFC drawings and BOM) and raw materials, then production orders, planning, job cards, QC, packing |
-| On-site | Site survey, site works, readiness, dispatch receipt, installation, snags, warranty visits |
+| Admin | Monitors everything and acts "on behalf of" a team when needed. Users, roles, permissions, projects, payments (only role that sees amounts), finance approvals, masters, reports, close-out |
+| Designer | **The project manager.** Client brief, concept, docket, BOQ and client approvals, design freeze and release to tracks, approval of GFC drawings and release to Procurement and Factory, dispatch go-ahead, snagging, handover. Can **view every operational module** on their own projects (not finance: payments, cost sheets, PO and work-order rates), edit only where listed in `/docs/permissions.md` |
+| GFC | Final measurements, GFC drawings, BOM and engineering sheet, technical check (by a different GFC user). Does not release; the Designer does |
+| Procurement | BOQ verification and approval, cost sheets, PO register (the ERP creates POs; Compass stores the number and file), finance approval requests, material mobilisation, goods receipt, bought-in items, inventory |
+| Vendor team | Outsourced services (Track A): vendor selection with Procurement, work orders, scheduling, progress verification, deep cleaning. Sees work-order rates |
+| Factory | Downstream of the Designer's release and Procurement: receives released items (with GFC drawings and BOM) and raw materials, then production orders, planning, job cards, QC, packing, dispatch with packing list |
+| On-site | Site visit and measurements, quality check of vendor work, room site-ready check, dispatch receipt, installation, snags, cleaning inspection |
 
-Every role sees only the projects it is a member of. Admin sees everything.
+Every role sees only the projects it is a member of. Admin sees everything. A **team lead** is a flag on a user, not a role. Warranty and service requests after handover are not in version 1 (see `/docs/mvp-scope.md`).
 
 ## Source documents (read the one relevant to your task)
 
 - `/docs/design-system.md` — the UX standard. **Read before building any screen.**
 - `/docs/permissions.md` — auth, roles, permissions, row-level security, access tests. **Read before touching auth, data access or any table.**
 - `/docs/data-model.md` — tables, fields, relationships, statuses.
-- `/docs/process-flow.md` — the 9 project stages, sub-tasks, owners and gates.
+- `/docs/process-flow.md` — the nine-stage pipeline with two parallel tracks (A onsite services, B millwork, loose furniture and bought-in), sub-tasks, owners and gates.
+- `/docs/workflow-model.md` — statuses, health, rollups, tracks, ownership, approvals, delegation, and what the founder decided. **Read before touching statuses, gates or ownership.**
+- `/docs/configurability.md` — what Admin can change in Settings and what is fixed. (Draft, to confirm.)
 - `/docs/roles-and-screens.md` — features and screens per role.
 - `/docs/collaboration.md` — tasks, discussion threads, inbox, notifications, Slack integration.
 - `/docs/mvp-scope.md` — what is in version 1 and in which order it is built.
@@ -69,10 +71,10 @@ src/
     (app)/
       layout.tsx       app shell: sidebar by role, top bar, command palette
       admin/           Admin workspace
-      design/          Designer workspace
+      designer/        Designer workspace (not design/, which is the /design showcase route)
       gfc/             GFC workspace
       procurement/     Procurement workspace
-      vendors/         Vendor team workspace
+      vendor-team/     Vendor team workspace (not vendors/, which could be confused with the vendors master)
       factory/         Factory workspace
       site/            On-site workspace (mobile-first)
       projects/[id]/   shared project record pages
@@ -100,9 +102,10 @@ docs/
 1. **Invite-only.** There is no public sign-up. Admin invites users and assigns role and projects.
 2. **Defence in depth.** Access is enforced in three layers: RLS in the database, a permission check in every server action and route handler (`requirePermission(module, action, projectId?)`), and role-based navigation in the UI. The UI layer is never the only check.
 3. **Least privilege.** Default deny. A role gets a permission only if the access matrix in `/docs/permissions.md` grants it.
-4. **Audit.** Changes to users, roles, permissions, project membership, approvals, gates, payments and variations are written to `audit_log`.
-5. **No data leaks through side doors.** Search, notifications, discussion threads, @mentions, email digests, Slack posts, exports, file URLs and realtime channels respect the same permissions. Storage files use signed URLs scoped to permitted users.
-6. **Access tests are the referee.** Every new table or screen extends the role-access tests. A task is not done if any access test fails.
+4. **Activity.** Changes to users, roles, permissions, project membership, approvals, gates, payments and variations are written to `activity_log` (shown in the app as Activity). Each entry records how it happened: by the system, by hand, or by Admin on behalf of a team. Project Activity never contains money amounts.
+5. **Money is split by audience.** BOQ prices: Admin, Designer, Procurement. Cost sheets and PO rates: Admin, Procurement. Work-order rates: Admin, Procurement, Vendor team. Payment amounts: Admin only. Everyone else sees only the milestone flag *received / pending*. Nobody approves their own work.
+6. **No data leaks through side doors.** Search, notifications, discussion threads, @mentions, Activity, email digests, Slack posts, exports, file URLs and realtime channels respect the same permissions. Storage files use signed URLs scoped to permitted users.
+7. **Access tests are the referee.** Every new table or screen extends the role-access tests. A task is not done if any access test fails.
 
 ## UX rules (summary — full standard in `/docs/design-system.md`)
 
@@ -134,12 +137,21 @@ docs/
 - Money in INR stored as integer paise (`bigint`); display with Indian grouping (₹12,34,567).
 - Dates stored as `timestamptz` in UTC; displayed in Asia/Kolkata, format `22 Oct 2026`.
 - Item codes follow `PROJECT-ROOM-CATEGORY-NN` (for example `VLA01-MBR-WD-01`); see `/docs/data-model.md`.
-- Every table has `id uuid`, `created_at`, `updated_at`, `created_by`.
+- Every business table has `id uuid`, `created_at`, `updated_at`, `created_by`. Join tables and insert-only logs (`activity_log`, `item_status_events`) skip `updated_at`.
+- Use plain names, not the old rule codes: *architect involved*, *phases*, *item classification*, *room site-ready*, *dispatch batch*, *handover sign-off*. "B1–B5" only means the Track B steps in `/docs/process-flow.md`.
+- Statuses, health and the stage are rolled up from items and tasks; never type them on a track, stage or project (see `/docs/workflow-model.md`).
 - Soft delete (`archived_at`) for business records; hard delete only for drafts.
 
 ## Open decisions (ask before assuming)
 
-Decided: internal use only — no vendor or client portal. The Vendor team acts for vendors; designers record client approvals with proof.
+Decided:
+- Internal use only — no vendor or client portal. The Vendor team acts for vendors; designers record client approvals with proof.
+- **The Designer is the project manager.** There is no separate Project Manager role.
+- Payment milestones are set per project by Admin (default two); amounts are visible to Admin only.
+- Item classification has four values: Millwork, Loose furniture, Onsite service, Bought-in. "Design frozen" is the moment the docket locks.
+- Warranty and service requests, and vendor bills, are Later (not v1).
 
-- Is there a separate Project Manager role? Current assumption: the Designer is the client's single point of contact.
-- Payment milestone percentages and warranty period length.
+To confirm with the founder:
+- Bought-in classification (Track B, skips GFC and Factory production) and Variations after design freeze.
+- Which scope tag opens Track B for a project with only bought-in items.
+- Which ERP, and whether every PO needs finance approval or only those above an amount (assumed: always).

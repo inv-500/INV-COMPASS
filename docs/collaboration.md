@@ -6,7 +6,9 @@ INV Compass is where the team coordinates, not just where it records. Every team
 
 General team chat stays in Slack. INV Compass holds conversations about specific work and sends key updates to Slack (see section 6).
 
-**Build phasing** (see `/docs/mvp-scope.md`): R1 — tasks, subtasks, My tasks, list and board views, threads with @mentions, photos and files, message-to-task, inbox and following. R5 — voice notes and photo-to-snag for site and factory. R6 — email digests, Slack integration, team workload view. Later — transcripts, calendar and timeline views, recurring tasks.
+Statuses, health, "waiting on", delegation and escalation follow `/docs/workflow-model.md`.
+
+**Build phasing** (see `/docs/mvp-scope.md`): R1 — tasks, subtasks, My tasks, list and board views, threads on projects and tasks with @mentions, photos and files, message-to-task, inbox and following (threads on items arrive with items in R2, and on other records as each one is built). R5 — voice notes and photo-to-snag for site and factory. R6 — email digests, Slack integration, team workload view. Later — transcripts, calendar and timeline views, recurring tasks.
 
 ---
 
@@ -16,23 +18,28 @@ Two kinds of task share one model and one set of views:
 
 | Kind | Created by | Example |
 | --- | --- | --- |
-| **Process task** | The app, from the stage templates in `/docs/process-flow.md` | "4.4 GFC drawing approval — MBR wardrobe" |
+| **Process task** | The app, from the stage and sub-task templates in `/docs/process-flow.md` (edited by Admin in Settings) | "B2.1 Designer reviews GFC drawings — MBR wardrobe" |
 | **Ad-hoc task** | Any user | "Re-measure the master bedroom wall before Friday" |
 
-**Every task has:** title, description (rich text), assignee (one owner), collaborators, due date (and optional start date), priority (`urgent` · `high` · `normal` · `low`), status (`to_do` · `in_progress` · `blocked` · `done`), linked project and optionally a room, item or other record, subtasks (one level), attachments, a discussion thread, and followers.
+**Every task has:** title, description (rich text), assignee (one owner), collaborators, due date (and optional start date), priority (`urgent` · `high` · `normal` · `low`), status, health, **waiting on** (a role first, then the person once someone picks it up), linked project and optionally a room, item or other record, subtasks (one level), attachments, a discussion thread, and followers.
+
+**Status** uses the labels in `/docs/workflow-model.md` §2: *Not started, In progress, On hold, Blocked, Done, Cancelled*. Admin can rename labels and add new ones, but each maps to one of four buckets (not started, in progress, blocked, done). On hold, Blocked and Cancelled need a reason. **Health** (on track, at risk, delayed) is calculated from the dates, never typed.
 
 **Rules**
 - Anyone can create a task on a project they are a member of and assign it to any member of that project.
 - Personal tasks (no project) are visible only to their creator and assignee.
 - Process tasks keep their gate rules; ad-hoc tasks never pass a gate.
-- Blocked tasks need a reason; the reason shows on the task and in the assignee's manager view.
+- Blocked and On hold tasks need a reason; the reason shows on the task and in the team lead's view. On hold stops the clock: no lateness alerts.
+- **Escalation:** a late task nudges the assignee, then the team lead, then the Designer. It reaches Admin only when blocked or delayed beyond a configured limit.
+- **Deputies:** a user can name a deputy for a date range; their tasks and "waiting on" items move across. The deputy must already be a member of the project, otherwise the hand-over is blocked with a message.
+- Nobody approves their own work; approval tasks go to a different person or role.
 - Completing a task with open subtasks asks for confirmation.
 - Recurring tasks (daily site report, weekly vendor review) with a simple repeat rule — later release.
 
 **Views**
 - **My tasks** — everything assigned to me, grouped Overdue · Today · This week · Later, plus "Assigned by me" and "Following".
 - **Project tasks** — list (default) and board (by status) in v1; calendar and timeline later; filtered by room, item, assignee or kind.
-- **Team tasks** — for a role lead: everything assigned to their team, with workload per person.
+- **Team tasks** — for a team lead (a flag on a user): everything assigned to their team, with workload per person. Team leads can reassign and reschedule within their team.
 - Every task view supports saved views, bulk edit and keyboard shortcuts (see `/docs/design-system.md`).
 
 **Quick capture**
@@ -77,7 +84,8 @@ New messages, reactions and typing indicators appear live. Record pages show who
 One inbox per user collects:
 - @mentions and replies to my messages
 - Tasks assigned to me, due soon or overdue, and changes to them
-- Approvals waiting for me
+- Approvals waiting for me, including finance approvals waiting to be recorded (Admin and the task owner)
+- Items and tasks where I am *waiting on* someone, and items waiting on my role
 - Activity on records I follow
 - Gate reached for my role (see `/docs/roles-and-screens.md`)
 
@@ -97,7 +105,7 @@ Conversations and tasks follow exactly the same permissions as the record they b
 - @mentioning someone who cannot see the record is blocked, with the message "Ravi can't see this item. Ask an Admin to add them to the project."
 - Search, inbox, notifications, email digests and Slack messages never include content the recipient cannot view.
 - Files in threads use the same storage rules and signed URLs as other project files.
-- Cost information posted in a thread is the poster's responsibility; threads on cost-restricted records (BOQ, payments) are visible only to roles with access to those records.
+- Cost information posted in a thread is the poster's responsibility; threads on cost-restricted records (BOQ, cost sheets, PO rates, work-order rates, payments, external approval amounts) are visible only to roles with access to those records (see the money table in `/docs/permissions.md`). Project Activity never shows amounts.
 - Edits and deletions keep a history visible to Admin; nothing is silently lost.
 
 ---
@@ -105,7 +113,7 @@ Conversations and tasks follow exactly the same permissions as the record they b
 ## 6. Slack integration (R6, simple)
 
 - An Admin connects a Slack workspace and maps projects or roles to Slack channels.
-- Chosen events are posted to Slack with a link back: approval waiting, item late, gate reached, snag raised, variation raised.
+- Chosen events are posted to Slack with a link back: approval waiting, item late, gate reached, snag raised, variation raised (to confirm).
 - Posts contain only the title and status, never cost data or private details. Opening the link requires an INV Compass login.
 - No two-way sync: replies happen in INV Compass so the record keeps the history.
 
@@ -122,7 +130,7 @@ Conversations and tasks follow exactly the same permissions as the record they b
 | Project discussion | General project conversation by topic | Post, start topic, pin |
 | Decisions | All messages marked as decisions in a project | Filter by room or item, export |
 | Inbox | Everything that needs me | Open, done, snooze, mute |
-| Team workload (leads) | Tasks per person, overdue, this week | Reassign, filter |
+| Team workload (team leads) | Tasks per person, overdue, this week | Reassign, filter |
 
 On mobile, Inbox, My tasks and threads are first-class tabs; posting a photo or voice note takes one tap.
 

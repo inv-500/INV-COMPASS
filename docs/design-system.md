@@ -172,7 +172,8 @@ Modelled on Attio and Linear list views.
 
 ### 4.3 Stage tracker
 
-- Horizontal stepper of the 9 project stages (or an item's lifecycle), each step: done (check), current (accent), blocked (danger), upcoming (neutral).
+- Horizontal stepper of the 9 project stages (or an item's lifecycle), each step: done (check), current (accent), blocked (danger), upcoming (neutral). Stage status is calculated, never typed (see `/docs/workflow-model.md`).
+- Stage 5 (Execution) expands into one row per open track (A and B), each with its own progress bar (for example "14 of 31 items ready"), health and "waiting on". There is no combined percentage. Tracks not in scope never appear.
 - The current step shows its gate and who it waits on: "Gate: client sign-off · waiting on client · 3 days".
 
 ### 4.3a Tasks and discussions
@@ -259,11 +260,11 @@ Each role lands on a **Home** that answers "what needs me now". Every Home also 
 
 | Role | Home shows | Device |
 | --- | --- | --- |
-| Admin | Portfolio health, overdue gates, payments due, pending variations | Desktop |
-| Designer | My approvals waiting, items blocked on me, upcoming client meetings | Desktop + tablet |
+| Admin | Exceptions only: blocked or delayed tracks and who holds them, items waiting too long, finance approvals to record, gate overrides this week, workload by team | Desktop |
+| Designer | My approvals waiting, GFC drawings to approve, items blocked on me, upcoming client meetings | Desktop + tablet |
 | GFC | Drawing queue by due date, revisions requested, ready to release | Desktop |
 | Procurement | Items to order by lead time, late POs, deliveries due today | Desktop |
-| Vendor team | Vendor work this week, work to verify, bills to check | Desktop + mobile |
+| Vendor team | Vendor work this week, work to verify, cleaning bookings | Desktop + mobile |
 | Factory | Today's production plan, QC waiting, items ready to pack | Tablet + mobile |
 | On-site | Today's sites, deliveries due, snags assigned, readiness checks | Mobile |
 

@@ -6,7 +6,7 @@ Rules about statuses, health, rollups, who can act and who sees what live in `/d
 
 Everything here is **configurable data** (stage templates, sub-task templates, gates) that Admin edits in Settings. See `/docs/configurability.md`. Lead qualification and sales sit outside this flow; a project starts when Admin creates it.
 
-Codes B1–B10 in older notes (architect yes/no, phases, item classification, room site-ready, dispatch batch, handover sign-off) still apply.
+The old rule codes B1, B2, B3, B7, B8 and B10 are retired, because B1–B5 now name the Track B steps. They are now plain names: **architect involved**, **phases**, **item classification**, **room site-ready**, **dispatch batch**, **handover sign-off**.
 
 ---
 
@@ -81,7 +81,7 @@ Gate → Requirement: scope tagged, Designer assigned. *Default: require.*
 | 2.1 | Client brief: needs, style, budget range, timeline | Designer | Saved |
 | 2.2 | Site documents: plans, architect drawings, photos | Designer | Uploaded |
 | 2.3 | Site visit and measurements | Designer / On-site | Logged |
-| 2.4 | Architect involved? Phases (B1, B2) | Designer | Set |
+| 2.4 | Architect involved? Phases | Designer | Set |
 | 2.5 | Brief confirmed with client | Designer | Proof attached |
 
 Gate → Concept: brief confirmed. *Default: warn.*
@@ -102,7 +102,7 @@ Gate → Design development: concept approval. *Default: warn.*
 | 4.1 | Detailed design per room | Designer | Uploaded |
 | 4.2 | Final material, finish and sample selection | Designer | Locked |
 | 4.3 | Build the docket: every item per room (PROJECT-ROOM-CATEGORY-NN) | Designer | Items created |
-| 4.4 | Classify each item: Millwork · Loose furniture · Onsite service | Designer | All classified |
+| 4.4 | Classify each item: Millwork · Loose furniture · Onsite service · Bought-in *(to confirm)* | Designer | All classified |
 | 4.5 | Prepare BOQ costing | Designer | BOQ drafted |
 | 4.6 | **BOQ verification and approval** | **Procurement** | Costing verified and final BOQ approved |
 | 4.7 | Client approval of design and BOQ (proof) | Designer | Recorded |
@@ -145,7 +145,7 @@ Gates: finance approval before PO release (*require*); quality check before site
 | B1.1 | Final site measurements | GFC / On-site | Confirmed |
 | B1.2 | GFC drawings per item | GFC | Uploaded |
 | B1.3 | BOM and engineering sheet per item | GFC | Complete |
-| B1.4 | Technical check | GFC | Passed |
+| B1.4 | Technical check | GFC (a different person from the one who prepared the drawing; the team lead if there is only one GFC user) | Passed |
 
 **B2 · Design approval**
 | # | Sub-task | Owner | Done when |
@@ -168,6 +168,8 @@ Gate: Designer approval of GFC drawings. *Default: require approval; Admin may o
 
 If everything is in stock, B3.3 to B3.6 are skipped for those lines.
 
+**Bought-in items** *(to confirm)*: lighting, rugs, curtains, appliances, stone, glass and similar. They use Track B but skip B1, B2 and B4 (no GFC drawings, no Factory production). Release to tracks sends them straight to Procurement: B3.3 to B3.7 (cost sheet, PO in the ERP, finance approval, release, goods receipt and inspection), then they are `ready` and go to dispatch to site with the rest.
+
 **B4 · Production — Factory**
 | # | Sub-task | Owner | Done when |
 | --- | --- | --- | --- |
@@ -189,8 +191,8 @@ Starts per room as soon as that room is ready. It does not wait for the whole pr
 
 | # | Sub-task | Owner | Done when |
 | --- | --- | --- | --- |
-| 6.1 | **Room site-ready check** (site work done, clean, dry, access, power; B7) | On-site | Room marked ready |
-| 6.2 | Dispatch batch planned from ready items for ready rooms (B8) | Factory + On-site | Batch created |
+| 6.1 | **Room site-ready check** (site work done, clean, dry, access, power) | On-site | Room marked ready |
+| 6.2 | Dispatch batch planned from ready items for ready rooms | Factory + On-site | Batch created |
 | 6.3 | Designer go-ahead for the batch | Designer | Recorded |
 | 6.4 | Dispatch with packing list | Factory | Dispatched |
 | 6.5 | Receipt at site and check against the list | On-site | Recorded |
@@ -219,7 +221,7 @@ Snags are separate records (`workflow-model.md` §5). Gate → Deep cleaning: no
 | --- | --- | --- | --- |
 | 9.1 | Final walkthrough | Designer | Held |
 | 9.2 | Handover pack: as-built, care guide, warranties | Designer | Uploaded |
-| 9.3 | Client sign-off (B10) | Designer | Attached |
+| 9.3 | Handover sign-off by the client | Designer | Attached |
 | 9.4 | **Final payment recorded as received** | Admin | Flag set |
 | 9.5 | Close the project and archive | Admin | Closed |
 
@@ -232,5 +234,8 @@ Gate → Closed: sign-off, zero open snags and final milestone received. *Defaul
 1. Which ERP, and whether an integration is wanted later. v1 stores the PO number and file by hand.
 2. Who runs deep cleaning (assumed: Vendor team books it, On-site inspects).
 3. Whether every PO needs finance approval or only those above an amount (assumed: always).
-4. Warranty and post-handover issues are not in the pipeline yet.
-5. Whether work-order rates (Track A) may be seen by Procurement as well as the Vendor team.
+4. Warranty and post-handover issues are not in the pipeline yet (moved to Later in `/docs/mvp-scope.md`).
+5. ~~Whether work-order rates (Track A) may be seen by Procurement as well as the Vendor team.~~ **Decided: yes**, Procurement sees them.
+6. *To confirm:* Variations after design freeze. The earlier flow had them; this pipeline does not mention them. They are kept in the other docs, marked *to confirm*.
+7. *To confirm:* the Bought-in classification (above), and which scope tag opens Track B for a project with only bought-in items.
+8. Design frozen is the moment the docket locks (decided). There is no separate "docket locked" step.
