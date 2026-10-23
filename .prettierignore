@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+build
+coverage
+playwright-report
+test-results
+pnpm-lock.yaml
+# The rulebook and product specs are written by hand and kept verbatim.
+CLAUDE.md
+docs
