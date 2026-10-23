@@ -1,0 +1,210 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * INV Compass design tokens. Source of truth: docs/design-system.md section 2.
+ * Build with these tokens only: no one-off colours, font sizes, radii or shadows.
+ *
+ * How the names map to the design-system doc:
+ *   bg -> background            text -> foreground          text-secondary -> muted-foreground
+ *   surface -> card / popover   surface-muted -> secondary / muted
+ *   text-tertiary -> subtle-foreground (placeholders, disabled; never for essential info)
+ *   accent -> primary           accent-hover -> primary-hover
+ *   accent-subtle -> accent     (shadcn calls the selected / hover background "accent")
+ *   border, border-strong -> border, border-strong
+ *   border-input (an addition, see docs/design-system.md) -> input
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --bg: #fafaf9;
+  --surface: #ffffff;
+  --surface-muted: #f4f3f1;
+  --border: #e7e5e1;
+  --border-strong: #d6d3cd;
+  --border-input: #8f8b84;
+  --text: #1c1b19;
+  --text-secondary: #64615b;
+  --text-tertiary: #8f8b84;
+  --accent: #2f5d50;
+  --accent-hover: #264c42;
+  --accent-subtle: #e8f0ed;
+  --on-accent: #ffffff;
+
+  --success: #2e7d4f;
+  --success-subtle: #eef7f1;
+  --warning: #a86200;
+  --warning-subtle: #fff9f0;
+  --danger: #b93a2e;
+  --danger-subtle: #fbe7e4;
+  --info: #2b62a8;
+  --info-subtle: #e4edf8;
+  --neutral: #64615b;
+  --neutral-subtle: #f4f3f1;
+}
+
+.dark {
+  --bg: #111110;
+  --surface: #191918;
+  --surface-muted: #21201e;
+  --border: #2c2b28;
+  --border-strong: #3a3935;
+  --border-input: #77736c;
+  --text: #edebe7;
+  --text-secondary: #a6a29a;
+  --text-tertiary: #77736c;
+  --accent: #7db5a3;
+  --accent-hover: #93c4b4;
+  --accent-subtle: #1f2e29;
+  --on-accent: #111110;
+
+  --success: #5dbb85;
+  --success-subtle: #1b2b22;
+  --warning: #e0a050;
+  --warning-subtle: #2e2414;
+  --danger: #e8776b;
+  --danger-subtle: #33201d;
+  --info: #6fa0e0;
+  --info-subtle: #1b2738;
+  --neutral: #a6a29a;
+  --neutral-subtle: #21201e;
+}
+
+@theme inline {
+  /* Colours (class names such as bg-background, text-muted-foreground, bg-success-subtle). */
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  --color-muted-foreground: var(--text-secondary);
+  --color-subtle-foreground: var(--text-tertiary);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--text);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--text);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-secondary: var(--surface-muted);
+  --color-secondary-foreground: var(--text);
+  --color-muted: var(--surface-muted);
+  --color-primary: var(--accent);
+  --color-primary-hover: var(--accent-hover);
+  --color-primary-foreground: var(--on-accent);
+  --color-accent: var(--accent-subtle);
+  --color-accent-foreground: var(--text);
+  --color-destructive: var(--danger);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--border-input);
+  --color-ring: var(--accent);
+  --color-success: var(--success);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-danger: var(--danger);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-info: var(--info);
+  --color-info-subtle: var(--info-subtle);
+  --color-neutral: var(--neutral);
+  --color-neutral-subtle: var(--neutral-subtle);
+
+  /* Fonts: Inter for text, JetBrains Mono only for codes and IDs. */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+
+  /* Type scale (size / line height). Default UI text is text-sm (13px). Weights: 400, 500, 600 only. */
+  --text-*: initial;
+  --text-xs: 12px;
+  --text-xs--line-height: 16px;
+  --text-sm: 13px;
+  --text-sm--line-height: 20px;
+  --text-base: 14px;
+  --text-base--line-height: 22px;
+  --text-md: 16px;
+  --text-md--line-height: 24px;
+  --text-lg: 20px;
+  --text-lg--line-height: 28px;
+  --text-lg--letter-spacing: -0.01em;
+  --text-xl: 24px;
+  --text-xl--line-height: 32px;
+  --text-xl--letter-spacing: -0.01em;
+  --text-2xl: 32px;
+  --text-2xl--line-height: 40px;
+  --text-2xl--letter-spacing: -0.01em;
+  --font-weight-*: initial;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  /* Radius: 6 inputs and buttons, 8 cards and panels, 12 dialogs, full for pills and avatars. */
+  --radius-*: initial;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* Elevation: flat by default. Shadows only for floating layers. */
+  --shadow-*: initial;
+  --shadow-sm: 0 2px 8px rgb(0 0 0 / 0.08), 0 0 0 1px rgb(0 0 0 / 0.04);
+  --shadow-lg: 0 16px 48px rgb(0 0 0 / 0.16), 0 0 0 1px rgb(0 0 0 / 0.06);
+
+  /* Motion: 120 to 200 ms. Ease-out entering, ease-in leaving. */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: var(--ease-out);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 20px;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Visible focus ring on every interactive element: 2 px accent outline, 2 px offset. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Numbers in tables line up. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "cv11", "ss01", "tnum";
+  }
+
+  code,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Respect reduced motion: replace movement with opacity. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -51,7 +51,8 @@ Colour carries meaning. Neutrals do the work; the accent marks the primary actio
 | `surface` | `#FFFFFF` | Cards, tables, panels |
 | `surface-muted` | `#F4F3F1` | Sidebar, table header, hover |
 | `border` | `#E7E5E1` | Hairlines, dividers |
-| `border-strong` | `#D6D3CD` | Input borders |
+| `border-strong` | `#D6D3CD` | Stronger hairlines and dividers (1.5:1, decorative only) |
+| `border-input` | `#8F8B84` | Input, select and checkbox borders. **Addition:** `border-strong` is only 1.5:1 against a card, below the 3:1 this document requires for UI boundaries |
 | `text` | `#1C1B19` | Primary text |
 | `text-secondary` | `#64615B` | Secondary text, labels |
 | `text-tertiary` | `#8F8B84` | Placeholders, disabled (never for essential info) |
@@ -68,6 +69,7 @@ Colour carries meaning. Neutrals do the work; the accent marks the primary actio
 | `surface-muted` | `#21201E` |
 | `border` | `#2C2B28` |
 | `border-strong` | `#3A3935` |
+| `border-input` | `#77736C` |
 | `text` | `#EDEBE7` |
 | `text-secondary` | `#A6A29A` |
 | `text-tertiary` | `#77736C` |
