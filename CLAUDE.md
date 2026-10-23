@@ -142,6 +142,22 @@ docs/
 - Statuses, health and the stage are rolled up from items and tasks; never type them on a track, stage or project (see `/docs/workflow-model.md`).
 - Soft delete (`archived_at`) for business records; hard delete only for drafts.
 
+## Setup and commands
+
+Commands (pnpm; Node 22): `pnpm dev`, `pnpm build`, `pnpm typecheck`, `pnpm lint`, `pnpm format`, `pnpm test` (Vitest), `pnpm test:e2e` (Playwright with an axe accessibility scan). In the cloud sandbox run e2e with `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/opt/pw-browsers/chromium`.
+
+Environment variables (names only; values never go in chat or in a commit):
+- `NEXT_PUBLIC_SUPABASE_URL` — must be `https://qiitpirpnqaonnzmdmhc.supabase.co`. `src/lib/env.ts` refuses any other project at startup and names `cblcahodlnreqgpasczp` and the old dead ref as blocked.
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — public by design.
+- `SUPABASE_SERVICE_ROLE_KEY` — secret, server-only; read only in `src/lib/env.server.ts`. The admin client `src/lib/supabase/admin.ts` is imported only from `src/server`.
+- `.env.local` is git-ignored; `.env.example` holds placeholders only. A pre-commit hook (`scripts/check-secrets.mjs`) blocks secret keys, service-role JWTs, database passwords and any `.env` file except `.env.example`. A machine's own environment variables beat `.env.local`, so check they do not point at another project.
+
+Notes for the code:
+- This is Next.js 16. Read the guide in `node_modules/next/dist/docs/` before using a Next.js API (see `AGENTS.md`). The old `middleware.ts` is now `proxy.ts`; session refresh is added there in the auth step.
+- Design tokens live in `src/app/globals.css` and mirror `/docs/design-system.md`; `tests/unit/design-tokens.test.ts` fails if any text and background pair drops below WCAG AA. Fonts (Inter, JetBrains Mono) are self-hosted from npm packages.
+- shadcn components are written by hand in `src/components/ui` because the sandbox cannot reach `ui.shadcn.com`. Use only tokens, never one-off colours.
+- The `/design` showcase route and the app shell are not built yet.
+
 ## Open decisions (ask before assuming)
 
 Decided:
