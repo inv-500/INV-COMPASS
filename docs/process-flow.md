@@ -1,134 +1,236 @@
-# INV Compass — Interior Project Process Flow
+# INV Compass — Project Pipeline
 
-Nine stages from discovery to post-handover. Each sub-task has an owner, a start condition, a done condition and a gate. The app models these as `stage_templates` and `task_templates` (see `/docs/data-model.md`), so Admin can adjust them in Settings.
+This is the agreed INV Home flow. It replaces the earlier nine-stage draft.
 
-Lead qualification sits outside this flow; a project starts when Admin creates it.
+Rules about statuses, health, rollups, who can act and who sees what live in `/docs/workflow-model.md`. This file holds the stages and sub-tasks.
 
-Codes B1–B10 refer to business rules captured in the data model:
-B1 architect yes/no · B2 phases · B3 item classification (route and type) · B7 room site-ready · B8 dispatch batch · B10 handover sign-off.
+Everything here is **configurable data** (stage templates, sub-task templates, gates) that Admin edits in Settings. See `/docs/configurability.md`. Lead qualification and sales sit outside this flow; a project starts when Admin creates it.
 
-Items marked [OPEN] or [ASSUMPTION] still need a founder decision.
-
-## Overview
-
-1. Discovery and brief
-2. Concept and commercials
-3. Design development
-4. Docket and technical design
-5. Procurement and production (parallel with 6)
-6. Site works (parallel with 5)
-7. Dispatch and installation
-8. Quality check and handover
-9. Post-handover
-
-Stages 1–4 run in order. Stage 6 starts once the contract is signed and runs alongside Stages 3–5; both tracks meet at dispatch, which needs items packed (5.5) **and** the room site-ready (B7).
+Codes B1–B10 in older notes (architect yes/no, phases, item classification, room site-ready, dispatch batch, handover sign-off) still apply.
 
 ---
 
-## Stage 1 — Discovery and brief
-Exit gate: **client signs off the brief.**
+## 1. The pipeline at a glance
 
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 1.1 | Discovery questionnaire | Designer | Project created | Budget, timeline, room-wise needs, services, style captured; architect yes/no (B1); item types in scope; phases (B2) | None |
-| 1.2 | Site survey and measurement | On-site; designer checks | 1.1 started (parallel) | Measurements, photos, service points and logistics notes logged | Designer approval |
-| 1.3 | Floor plan | Architect, or designer if no architect (B1) | 1.2 done, or architect's plan received | Base floor plan uploaded | Designer approval |
-| 1.4 | Brief sign-off | Designer, client | 1.1–1.3 done | Written brief confirmed by client | Client sign-off |
+Nine stages in the Stage Tracker:
 
-## Stage 2 — Concept and commercials
-Exit gate: **contract signed and advance received.**
+| # | Stage | Owner | Phase |
+| --- | --- | --- | --- |
+| 1 | New | Admin | Shared |
+| 2 | Requirement | Designer | Shared |
+| 3 | Concept design | Designer | Shared |
+| 4 | Design development | Designer | Shared |
+| 5 | Execution | Track owners | Parallel tracks A and B |
+| 6 | Installation | On-site | Closing |
+| 7 | Snagging | On-site, Designer | Closing |
+| 8 | Deep cleaning | Vendor team | Closing |
+| 9 | Handover | Designer | Closing |
 
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 2.1 | Concept deck | Designer | Brief signed off | Concept direction and space-planning options shared | None |
-| 2.2 | First-cut BOQ | Designer; estimator [ASSUMPTION] | 2.1 in progress | Room-wise budget estimate shared | None |
-| 2.3 | Concept and BOQ acceptance | Client | 2.1 and 2.2 shared | Client confirms direction and budget band in writing | Client acceptance |
-| 2.4 | Contract and advance payment | Founder / sales [OPEN] | 2.3 done | Scope, specification, milestones, approval turnaround and variation terms signed; advance received | Payment received |
+```
+SHARED (in order)      1 New → 2 Requirement → 3 Concept → 4 Design development
+                                                     │ release (scope decides the tracks)
+EXECUTION (parallel)   Track A  Onsite services ─────┤
+                       Track B  Millwork & loose furniture
+                                                     │ per-room "site ready"
+CLOSING (in order)     6 Installation → 7 Snagging → 8 Deep cleaning → 9 Handover → Closed
+```
 
-## Stage 3 — Design development
-Exit gate: **final BOQ approved by client.**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 3.1 | Design presentation | Designer | Contract signed | Layouts and 3D renders presented; feedback closed | Client acceptance |
-| 3.2 | Mood board and samples | Designer, client | 3.1 accepted | Materials and finishes approved; signed master samples kept | Client sign-off |
-| 3.3 | Final BOQ | Designer; estimator [ASSUMPTION] | 3.2 signed off | BOQ updated to approved materials | Client approval |
-| 3.4 | Design-stage payment | Admin (accounts) | 3.3 approved | Milestone payment received | Payment received [ASSUMPTION] |
-
-## Stage 4 — Docket and technical design
-Exit gate: **production release — client-approved GFC drawings.**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 4.1 | Docket | Design team | Final BOQ approved | Every item coded, tagged and classified (B3); docket submitted and locked | Docket submitted |
-| 4.2 | Final site measurement | On-site; designer checks | Site wet work done | Final dimensions and reference lines recorded | Designer approval |
-| 4.3 | Engineering design and BOM | GFC | 4.1 locked and 4.2 done | GFC drawings and BOM ready per item | Internal technical check [OPEN] |
-| 4.4 | GFC drawing approval | Designer, client | 4.3 done | Client has signed GFC drawings per item or room | Client sign-off |
-| 4.5 | Mock-ups and prototypes | Factory, designer | 4.4 signed (hero or repeated items only) | Prototype approved before batch production | Client sign-off |
-
-## Stage 5 — Procurement and production (parallel with Stage 6)
-Exit gate: **items pass QC and are ready to dispatch.**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 5.1 | Procurement of bought-in items | Procurement | Each item's approval (long-lead first) | POs placed; items delivered and inspected against PO and sample | Inward inspection |
-| 5.2 | Factory raw materials | Procurement / Factory [OPEN] | GFC drawings approved | Materials in stock for the production order | None |
-| 5.3 | Production — millwork | Factory | 5.2 done | Made and matched to master sample | Stage checks [OPEN] |
-| 5.4 | Production — loose furniture | Factory | 5.2 done; prototype approved if needed | Frames, finish and upholstery complete | Stage checks [OPEN] |
-| 5.5 | Factory QC and pre-dispatch check | QC lead [OPEN]; optional client/designer visit | 5.3 / 5.4 done | Checked, packed and labelled by room | QC pass |
-| 5.6 | Pre-dispatch payment | Admin (accounts) | 5.5 passed | Milestone payment received | Payment received [ASSUMPTION] |
-
-## Stage 6 — Site works (parallel with Stage 5)
-Exit gate: **room site-ready for millwork (B7).**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 6.1 | Site handover and protection | On-site | Contract signed, site available | Condition report and photos; floors, lifts, windows protected | None |
-| 6.2 | Civil, MEP and false ceiling | On-site / Vendor team | 6.1 done; points marked from approved drawings | Works done and tested | Designer check |
-| 6.3 | Flooring, plaster, first paint coats | On-site / Vendor team | 6.2 done | Wet work complete; room lockable | None |
-| 6.4 | Site readiness check | On-site; designer checks | 6.3 done | Readiness checklist passed (B7) | Site ready (B7) |
-
-## Stage 7 — Dispatch and installation
-Exit gate: **all items installed or placed.**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 7.1 | Dispatch planning and storage | On-site [ASSUMPTION] | Items packed (5.5) and room ready (B7) | Items in a dispatched batch (B8), or held in storage | Designer go-ahead [OPEN] |
-| 7.2 | Receipt inspection at site | On-site | Items received | Checked against packing list; damage logged with photos | None |
-| 7.3 | Millwork installation | On-site | 7.2 done | Fixed, levelled, scribed, hardware adjusted | None |
-| 7.4 | Follow-on vendor items | Vendor team; on-site coordinates | 7.3 done for that room | Stone, glass, mirrors, metal trims fitted | None |
-| 7.5 | After-millwork services and final paint | On-site / Vendor team | 7.3 / 7.4 done | Electrical fit-off, fixtures, final paint done | None |
-| 7.6 | Loose furniture placement | On-site | Room cleaned after 7.5 | Furniture, rugs, curtains placed | None |
-| 7.7 | Protection of installed work | On-site | Each item installed | Installed items covered until handover | None |
-
-## Stage 8 — Quality check and handover
-Exit gate: **handover sign-off (B10).**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 8.1 | Testing and commissioning | On-site | Stage 7 done | Lights, automation, appliances, every door, drawer and lock tested | None |
-| 8.2 | Internal QC and snag list | Designer, On-site | 8.1 done | Snags raised and closed | Designer check [OPEN] |
-| 8.3 | Deep cleaning and styling | On-site, Designer | 8.2 closed | Cleaned; accessories, art, soft furnishings placed | None |
-| 8.4 | Client walk-through | Designer, client | 8.3 done | Client snags logged and closed | Client acceptance |
-| 8.5 | Handover pack | Designer | 8.4 done | Warranties, care guide, finish register, spares and keys handed over | None |
-| 8.6 | Final sign-off and payment | Designer, client, Admin | 8.5 done | Sign-off recorded (B10); final payment received | Handover sign-off |
-
-## Stage 9 — Post-handover
-Exit gate: **warranty period ends and project closed.**
-
-| # | Sub-task | Owner | Starts when | Done when | Gate |
-| --- | --- | --- | --- | --- | --- |
-| 9.1 | Defects and warranty support | On-site [OPEN] | Handover sign-off | Service requests closed within warranty [OPEN: length] | None |
-| 9.2 | Internal close-out | Admin | Handover sign-off | Cost vs BOQ, margin, vendor ratings, lessons recorded | None |
-| 9.3 | Feedback, photos, referral | Designer | Client moved in | Feedback, photos (with consent), referral requested | None |
-| 9.4 | Retention release | Admin (accounts) | Warranty ends | Retention settled; project closed | None |
+- Scope is a multi-select tag on the project: **Onsite services**, **Millwork**, **Loose furniture**. Millwork and Loose furniture both use Track B.
+- A project can have **A only, B only, or both**. "Both" is not a third track. A and B simply run side by side.
+- If a track is not in scope it never appears.
+- Adding a scope later opens that track from that point.
 
 ---
 
-## Rules across stages
+## 2. Money in the flow (the team never sees finance)
 
-- **Variations after docket lock (4.1):** priced, time impact shown, client approves in writing, docket/drawings/BOQ updated, then released. Released items affected by a variation return to GFC.
-- **Approval turnaround:** the contract sets working days per approval; overdue approvals are flagged and shift dates.
-- **Revision limits:** concept and design presentation include a set number of revision rounds.
-- **Payment milestones gate work:** 2.4, 3.4, 5.6, 8.6, 9.4. Percentages [OPEN].
-- **Gate overrides:** only Admin, with a written reason, logged.
+Two separate documents, two separate audiences:
+
+| Document | What it is | Prepared by | Seen by |
+| --- | --- | --- | --- |
+| **BOQ** | What the client pays | Designer | Admin, Designer, Procurement |
+| **Cost sheet** | What INV Home pays (internal cost) | Procurement | Admin, Procurement |
+
+**Client payments** happen at several milestones, set per project by Admin. The default is two:
+1. **Milestone 1:** when the design is frozen (end of Stage 4).
+2. **Final milestone:** after the entire work is complete (before the project is closed).
+
+Payment amounts and records are visible to **Admin only**. Everyone else on the project sees only a flag: *Milestone 1: received / pending*, with no amounts. Gates use the flag, not the money.
+
+The **ERP** creates the PO number. INV Compass never creates POs. For every PO, Compass stores the **ERP PO number, the PO file, the status and who holds it**.
+
+---
+
+## 3. Stages 1–4 (shared)
+
+### Stage 1 · New — Admin
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 1.1 | Create project: code, client, site address, type | Admin | Saved |
+| 1.2 | Tag scope | Admin | At least one scope |
+| 1.3 | Assign Designer (project manager) | Admin | Named |
+| 1.4 | Set payment milestones (default two) | Admin | Milestones set |
+| 1.5 | Add team members | Admin / Designer | Members added |
+| 1.6 | Folders, kickoff thread and default tasks | System | Created |
+
+Gate → Requirement: scope tagged, Designer assigned. *Default: require.*
+
+### Stage 2 · Requirement — Designer
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 2.1 | Client brief: needs, style, budget range, timeline | Designer | Saved |
+| 2.2 | Site documents: plans, architect drawings, photos | Designer | Uploaded |
+| 2.3 | Site visit and measurements | Designer / On-site | Logged |
+| 2.4 | Architect involved? Phases (B1, B2) | Designer | Set |
+| 2.5 | Brief confirmed with client | Designer | Proof attached |
+
+Gate → Concept: brief confirmed. *Default: warn.*
+
+### Stage 3 · Concept design — Designer
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 3.1 | Space planning and layouts | Designer | Uploaded |
+| 3.2 | Mood boards, material and finish direction | Designer | Uploaded |
+| 3.3 | Concept presentation | Designer | Held |
+| 3.4 | Client concept approval (proof) | Designer | Recorded |
+
+Gate → Design development: concept approval. *Default: warn.*
+
+### Stage 4 · Design development — Designer
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 4.1 | Detailed design per room | Designer | Uploaded |
+| 4.2 | Final material, finish and sample selection | Designer | Locked |
+| 4.3 | Build the docket: every item per room (PROJECT-ROOM-CATEGORY-NN) | Designer | Items created |
+| 4.4 | Classify each item: Millwork · Loose furniture · Onsite service | Designer | All classified |
+| 4.5 | Prepare BOQ costing | Designer | BOQ drafted |
+| 4.6 | **BOQ verification and approval** | **Procurement** | Costing verified and final BOQ approved |
+| 4.7 | Client approval of design and BOQ (proof) | Designer | Recorded |
+| 4.8 | **Design frozen** | Designer | Frozen |
+| 4.9 | **Milestone 1 payment recorded as received** | Admin | Flag set |
+| 4.10 | Release to tracks | Designer | Released |
+
+Gates:
+- BOQ cannot go to the client until Procurement has approved it. *Default: require.*
+- Release to tracks needs design frozen and milestone 1 received. *Default: require; Admin may override with a reason.*
+
+On release the app opens Track A and/or B from the scope, creates their tasks, and routes each item by its classification.
+
+---
+
+## 4. Stage 5 · Execution (parallel tracks)
+
+### Track A · Onsite services
+For service items: civil, electrical, plumbing, false ceiling, painting, flooring and similar, done by vendors.
+
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| A1.1 | Service scope and vendor quotes; vendors chosen | Procurement + Vendor team | Vendor per service |
+| A1.2 | Cost sheet prepared from the approved BOQ and uploaded to the ERP | Procurement | Uploaded |
+| A1.3 | PO prepared in the ERP; **ERP PO number and file stored in Compass** | Procurement | Stored |
+| A2.1 | **Finance approval** recorded (external approval, `workflow-model.md` §6) | Procurement or Admin | Recorded with proof |
+| A2.2 | PO released to vendor | Procurement | Released |
+| A3.1 | Mobilisation and site schedule | Vendor team | Schedule set |
+| A3.2 | Vendor execution with progress updates and photos | Vendor team | Logged |
+| A3.3 | Quality check of vendor work | On-site | Passed |
+| A4.1 | **Site work complete** | Vendor team / On-site | Marked |
+
+Gates: finance approval before PO release (*require*); quality check before site work complete (*warn*).
+
+### Track B · Millwork and loose furniture
+
+**B1 · GFC**
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| B1.1 | Final site measurements | GFC / On-site | Confirmed |
+| B1.2 | GFC drawings per item | GFC | Uploaded |
+| B1.3 | BOM and engineering sheet per item | GFC | Complete |
+| B1.4 | Technical check | GFC | Passed |
+
+**B2 · Design approval**
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| B2.1 | Designer reviews GFC drawings against the approved design | Designer | Approved or returned |
+| B2.2 | Release to Procurement and Factory | Designer | Released |
+
+Gate: Designer approval of GFC drawings. *Default: require approval; Admin may override.*
+
+**B3 · Procurement** (starts when the BOM and engineering sheet arrive; runs alongside B4)
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| B3.1 | Receive BOM and engineering sheet | Procurement | Received |
+| B3.2 | Stock check against the BOM | Procurement | Each line: in stock / to buy |
+| B3.3 | **Cost sheet** prepared and uploaded to the ERP | Procurement | Uploaded |
+| B3.4 | PO prepared in the ERP; **ERP PO number and file stored in Compass** | Procurement | Stored |
+| B3.5 | **Finance approval** recorded | Procurement or Admin | Recorded with proof |
+| B3.6 | PO released to supplier | Procurement | Released |
+| B3.7 | **Material mobilisation**: expediting, delivery tracking, inward inspection, goods receipt | Procurement / Factory | Receipts recorded |
+
+If everything is in stock, B3.3 to B3.6 are skipped for those lines.
+
+**B4 · Production — Factory**
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| B4.1 | Production order and job cards per item | Factory | Created |
+| B4.2 | Cutting, machining, assembly, finishing | Factory | Logged |
+| B4.3 | In-factory quality check | Factory | Passed |
+| B4.4 | Packing and labelling (QR) | Factory | Packed |
+
+**B5 · Ready for dispatch.** Items become `ready`, one by one.
+
+Gates: material available before production starts (*warn*); quality check before packing (*require*).
+
+---
+
+## 5. Closing stages
+
+### Stage 6 · Installation — On-site
+Starts per room as soon as that room is ready. It does not wait for the whole project.
+
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 6.1 | **Room site-ready check** (site work done, clean, dry, access, power; B7) | On-site | Room marked ready |
+| 6.2 | Dispatch batch planned from ready items for ready rooms (B8) | Factory + On-site | Batch created |
+| 6.3 | Designer go-ahead for the batch | Designer | Recorded |
+| 6.4 | Dispatch with packing list | Factory | Dispatched |
+| 6.5 | Receipt at site and check against the list | On-site | Recorded |
+| 6.6 | Installation | On-site | Installed |
+
+A room needs its Track A work done (if any) and its Track B items ready. Gates: room readiness and Designer go-ahead (*warn*).
+
+### Stage 7 · Snagging — On-site, Designer
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 7.1 | Snag walkthrough per room | Designer / On-site | Snags raised |
+| 7.2 | Fix snags | Factory / Vendor team / On-site | Snags closed |
+| 7.3 | Re-inspection | Designer | Passed |
+
+Snags are separate records (`workflow-model.md` §5). Gate → Deep cleaning: no open snags, or accepted by the client in writing. *Default: warn.*
+
+### Stage 8 · Deep cleaning — Vendor team
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 8.1 | Book the cleaning vendor | Vendor team | Booked |
+| 8.2 | Deep clean per room | Vendor team | Done |
+| 8.3 | Cleaning inspection | On-site / Designer | Passed |
+
+### Stage 9 · Handover — Designer
+| # | Sub-task | Owner | Done when |
+| --- | --- | --- | --- |
+| 9.1 | Final walkthrough | Designer | Held |
+| 9.2 | Handover pack: as-built, care guide, warranties | Designer | Uploaded |
+| 9.3 | Client sign-off (B10) | Designer | Attached |
+| 9.4 | **Final payment recorded as received** | Admin | Flag set |
+| 9.5 | Close the project and archive | Admin | Closed |
+
+Gate → Closed: sign-off, zero open snags and final milestone received. *Default: require approval.*
+
+---
+
+## 6. Open items
+
+1. Which ERP, and whether an integration is wanted later. v1 stores the PO number and file by hand.
+2. Who runs deep cleaning (assumed: Vendor team books it, On-site inspects).
+3. Whether every PO needs finance approval or only those above an amount (assumed: always).
+4. Warranty and post-handover issues are not in the pipeline yet.
+5. Whether work-order rates (Track A) may be seen by Procurement as well as the Vendor team.
