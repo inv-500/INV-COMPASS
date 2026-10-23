@@ -17,7 +17,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
+:root,
+.light {
   --bg: #fafaf9;
   --surface: #ffffff;
   --surface-muted: #f4f3f1;
@@ -162,6 +163,23 @@
   html {
     -webkit-text-size-adjust: 100%;
     color-scheme: light;
+  }
+
+  /* Icons: stroke 1.5 everywhere (design-system.md section 2.4). */
+  svg.lucide {
+    stroke-width: 1.5;
+  }
+
+  /* A .light or .dark wrapper re-applies that theme's tokens, so /design can show both side by side. */
+  .light {
+    color-scheme: light;
+    background-color: var(--bg);
+    color: var(--text);
+  }
+
+  .dark {
+    background-color: var(--bg);
+    color: var(--text);
   }
 
   html.dark {
