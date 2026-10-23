@@ -50,7 +50,6 @@ Edit includes view. Approve is listed separately. "—" means hidden. "own proje
 | `docket` (items) | view | edit | view | view | view | view | view |
 | `variations` (to confirm) | edit + approve | edit | view | view | view | view | view |
 | `gfc_drawings` (drawings, BOM, engineering sheet) | view | view + approve | edit | view | view | view | view |
-| `technical_check` (GFC internal check; checker must differ from preparer) | view | view | approve | — | — | — | — |
 | `procurement` (PO register with ERP number and file, material mobilisation, goods receipt, inventory, imports) | view | view | — | edit | view | view | view |
 | `vendor_work` (work packages, work orders, schedule, progress) | view | view | — | view | edit | — | view |
 | `work_order_rates` | view | — | — | view | edit | — | — |
@@ -75,7 +74,7 @@ Edit includes view. Approve is listed separately. "—" means hidden. "own proje
 
 - **Designer sees every operational module** on their own projects, so they can follow any item across GFC, procurement, factory, vendors and site. "Every module" does **not** include finance: `payments`, `cost_sheets`, `work_order_rates`, `financial_reports` and the system-wide pages (`users_roles`, `settings`, `system_activity`).
 - **Tasks and discussions:** every role can create and assign tasks and post in discussions, but only on projects they are members of and only on records they can view. A thread inherits access from its record (`can_view_entity(entity_type, entity_id)`), so `discussions.edit` never widens access. Personal tasks are visible only to creator and assignee. Users can edit or delete only their own messages (delete within 15 minutes); Admin can remove any message, logged. See `/docs/collaboration.md` §5.
-- **Doing and approving are separate.** GFC prepares drawings, the Designer approves them. The Designer prepares the BOQ, Procurement verifies and approves it. Procurement prepares the cost sheet and PO, finance approval is recorded as an external approval. Nobody approves their own work: gate functions reject an approver who is the preparer. The GFC technical check is done by a different GFC user than the one who prepared the drawing, or by the team lead if there is only one GFC user.
+- **Doing and approving are separate.** GFC prepares drawings, the BOM and the engineering sheet, and passes them straight to the Designer, who approves (step B2). There is no check inside GFC. The Designer prepares the BOQ, Procurement verifies and approves it. Procurement prepares the cost sheet and PO, finance approval is recorded as an external approval. Nobody approves their own work: gate functions reject an approver who is the preparer.
 - **Release to Procurement and Factory is done by the Designer** (after approving the GFC drawings). GFC does not release.
 - **External approvals** (finance approval of POs, and anything given by a person without a login): Admin or Procurement records it with proof. Project members see that it exists and its status, never the amount.
 - **Gate overrides:** the Designer can pass *warn* gates on their own projects, with a reason. Admin handles *require approval* and *block* gates. Every override is shown on the project and in Activity.
@@ -188,7 +187,7 @@ Playwright tests in `tests/e2e/access/` plus SQL tests for policies:
 4. Assert money is hidden correctly: payment amounts visible to Admin only; cost sheets and PO rates to Admin and Procurement only; work-order rates to Admin, Procurement and Vendor team only; BOQ prices to Admin, Designer and Procurement only. Everyone else sees milestone flags and POs without amounts.
 5. Assert forbidden URLs show the no-access page and do not reveal whether the record exists.
 6. Assert search, notifications, inbox, threads, @mentions, Activity, email digests, Slack posts and file URLs never return out-of-scope data; @mentioning someone without access is blocked; project Activity never contains amounts.
-7. Assert nobody can approve their own work (BOQ, GFC technical check, drawings) and that gate overrides follow the rules (Designer: *warn* on own projects only; Admin: all).
+7. Assert nobody can approve their own work (BOQ, GFC drawings) and that gate overrides follow the rules (Designer: *warn* on own projects only; Admin: all).
 8. Output a role × module table (allowed / blocked) in the test report; it must match section 2.
 
 Any new table, module or screen adds its cases here. A failing access test blocks the merge.

@@ -62,7 +62,7 @@ The **item** is the unit that travels from design to handover. Every team update
 - `code` (short, unique, e.g. `VLA01`), `name`, `client_name`, `client_email`, `client_phone`
 - `site_address`, `city`, `carpet_area_sqft`
 - `project_type` (`villa` · `apartment` · `penthouse` · `office` · `hospitality` · `other`)
-- `scope` — array of `millwork`, `loose_furniture`, `onsite_services` (at least one). Decides which tracks open at release. Adding a scope later opens that track from then on.
+- `scope` — array of `millwork`, `loose_furniture_bought_in` (label "Loose furniture and bought-in"), `onsite_services` (at least one). `onsite_services` opens Track A; the other two open Track B. Decides which tracks open at release. Adding a scope later opens that track from then on.
 - `has_architect` (bool) — architect involved; `architect_name`, `architect_contact`
 - `phases jsonb` — phase name, rooms, target dates
 - `project_manager_id` (→ profiles) — the assigned Designer
@@ -130,11 +130,11 @@ Side states: `on_hold`, `cancelled` (via variation). An item keeps its step whil
 
 ## 6. GFC
 
-**gfc_drawings** — `item_id`, `version`, `document_id`, `engineering_sheet_document_id`, `status` (`draft` · `technical_check` · `awaiting_designer_approval` · `approved` · `returned` · `superseded`), `prepared_by`, `checked_by` (must differ from `prepared_by`; the team lead if there is only one GFC user), `checked_at`, `approved_by` (Designer), `approved_at`, `revision_reason`, `now_with_role`, `now_with_user_id`
+**gfc_drawings** — `item_id`, `version`, `document_id`, `engineering_sheet_document_id`, `status` (`draft` · `awaiting_designer_approval` · `approved` · `returned` · `superseded`), `prepared_by`, `approved_by` (Designer, never the preparer), `approved_at`, `revision_reason`, `now_with_role`, `now_with_user_id`
 
 **bom_lines** — `item_id`, `gfc_drawing_id`, `material_id`, `description`, `qty`, `unit`, `stock_status` (`in_stock` · `to_buy`, set by Procurement), `notes`
 
-Not in v1: the old submittal register for client sign-off of GFC drawings. The new flow has the Designer approve GFC drawings against the approved design. Bring it back only if the client still signs drawings.
+Later: the old submittal register for client sign-off of GFC drawings (`submittals`) is not in v1. The Designer approves GFC drawings against the approved design; client sign-off of GFC drawings may return later. GFC completes the drawing, BOM and engineering sheet and passes them straight to the Designer; there is no check inside GFC.
 
 ---
 
@@ -281,7 +281,7 @@ Full behaviour in `/docs/workflow-model.md` and `/docs/collaboration.md`. Intern
 1. Can one user hold more than one role (for example a designer who also handles procurement)? Current model: one role per user, overrides in v2.
 2. Are items ever split across rooms or phases after design freeze?
 3. Does the factory make items for stock (not tied to a project)?
-4. Which scope tag opens Track B for a project that only has bought-in items (for example lighting and rugs)? Suggestion: treat bought-in as part of *Loose furniture*, or add a fourth scope tag.
+4. ~~Which scope tag opens Track B for bought-in items?~~ Decided: the scope tag is "Loose furniture and bought-in".
 5. Should `approvals` (client, with proof) and `external_approvals` (no login, with proof) become one table?
 6. Lists of ids stored in one column (`item_ids`, `room_ids`, `project_ids`) cannot carry foreign keys; turn them into join tables during the data-model review.
 7. Variations and bought-in classification are marked *to confirm* by the founder.

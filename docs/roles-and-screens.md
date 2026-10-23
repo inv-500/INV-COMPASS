@@ -107,16 +107,15 @@ Turns released Track B items (millwork and loose furniture) into buildable drawi
 - Final site measurements (with On-site)
 - Versioned GFC drawings with revision reasons
 - BOM and engineering sheet per item linked to the material master; cutting-list export
-- Technical check by a different GFC user (the team lead if there is only one GFC user)
+- When the drawings, BOM and engineering sheet are complete, pass them straight to the Designer for review (B2). There is no technical check inside GFC
 - Pull back released items affected by a variation (to confirm)
 
 | Screen | Shows | Actions |
 | --- | --- | --- |
 | Home / GFC queue | Items awaiting drawings by project and due date | Pick up, assign |
 | Final measurements | Room-wise final dimensions and reference lines | Review, request re-measure |
-| Item workspace | Item details, references, samples, drawing versions, BOM | Upload drawing, build BOM, notes |
+| Item workspace | Item details, references, samples, drawing versions, BOM | Upload drawing, build BOM, notes, send to Designer |
 | BOM editor | Material and hardware lines per item | Add, copy from similar item, export |
-| Technical check | Drawings awaiting an internal check | Pass, return with comments |
 | Revisions and variations | Items affected after release | Revise, resubmit |
 
 ---
@@ -250,5 +249,4 @@ Measures, checks vendor work, marks rooms ready, receives and installs, supports
 ## Open questions
 
 - Separate factory planner role vs shop-floor staff?
-- Which scope tag opens Track B for a project with only bought-in items?
 - Warranty and service requests after handover are not in v1 (see `/docs/mvp-scope.md`, Later).

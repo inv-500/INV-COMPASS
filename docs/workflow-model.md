@@ -148,7 +148,7 @@ Apply these when updating the repo docs. Each is a decision from the founder or 
 - Add `team_lead` flag and delegation (section 6).
 
 **`/docs/data-model.md`**
-- `projects.scope` array: `millwork`, `loose_furniture`, `onsite_services`.
+- `projects.scope` array: `millwork`, `loose_furniture_bought_in` ("Loose furniture and bought-in"), `onsite_services`.
 - `workstreams`: project_id, track (`A`/`B`), owner_id, status, health, now_with_role, now_with_user (status and health calculated).
 - `stage_templates` (phase, track, order, opens_when_scope, acting_role, archived_at) and `task_templates` (stage, code, acting_role, approver_role, gate_strictness, depends_on, transition_mode).
 - `item_status_events`: item_id, from, to, source (`system`/`manual`/`admin_on_behalf`), actor, reason, proof_file_id.

@@ -11,7 +11,7 @@ Principle: INV Home's way of working lives in **data that Admin edits in Setting
 | Area | What Admin can change | Where it is stored | Notes |
 | --- | --- | --- | --- |
 | Stages | Name, order, phase (shared, execution, closing), which track, when it opens (from project scope), acting role, SLA days | `stage_templates` | Stages in use are archived, never deleted |
-| Sub-tasks | Code, name, acting role, approver role, start and done conditions, dependencies, SLA days | `task_templates` | Same archive rule. New projects use the current templates; running projects keep what they have *(assumed)* |
+| Sub-tasks | Code, name, acting role, approver role, start and done conditions, dependencies, SLA days | `task_templates` | Same archive rule. New projects use the current templates; running projects keep what they have *(assumed)*. **Admin can add an optional GFC check back as a sub-task** (for example after B1) if INV Home wants one; it is not in the default pipeline |
 | Gates | What must be true (none, internal approval, client approval, payment flag, checklist) and how strict it is (**warn**, **require**, **require approval**, **block**) | `task_templates.gate_type`, `gate_strictness` | Defaults are written beside each gate in the process flow |
 | Transition mode | For each status change: **Automatic only**, **Manual only**, or **Both** (default Both) | `task_templates.transition_mode` | Judgment steps such as client approval default to Manual with proof |
 | Status labels | Rename labels and add new ones | `status_labels` | Every label must map to one of the four buckets (see section 2) |

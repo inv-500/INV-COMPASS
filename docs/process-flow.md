@@ -35,7 +35,7 @@ EXECUTION (parallel)   Track A  Onsite services ─────┤
 CLOSING (in order)     6 Installation → 7 Snagging → 8 Deep cleaning → 9 Handover → Closed
 ```
 
-- Scope is a multi-select tag on the project: **Onsite services**, **Millwork**, **Loose furniture**. Millwork and Loose furniture both use Track B.
+- Scope is a multi-select tag on the project: **Onsite services**, **Millwork**, **Loose furniture and bought-in**. Millwork and Loose furniture and bought-in both open Track B.
 - A project can have **A only, B only, or both**. "Both" is not a third track. A and B simply run side by side.
 - If a track is not in scope it never appears.
 - Adding a scope later opens that track from that point.
@@ -145,7 +145,8 @@ Gates: finance approval before PO release (*require*); quality check before site
 | B1.1 | Final site measurements | GFC / On-site | Confirmed |
 | B1.2 | GFC drawings per item | GFC | Uploaded |
 | B1.3 | BOM and engineering sheet per item | GFC | Complete |
-| B1.4 | Technical check | GFC (a different person from the one who prepared the drawing; the team lead if there is only one GFC user) | Passed |
+
+B1 ends when GFC has completed the drawings, BOM and engineering sheet. The next step is B2, the Designer's review. There is no check inside GFC (Admin can add an optional GFC check back as a sub-task in Settings).
 
 **B2 · Design approval**
 | # | Sub-task | Owner | Done when |
@@ -237,5 +238,6 @@ Gate → Closed: sign-off, zero open snags and final milestone received. *Defaul
 4. Warranty and post-handover issues are not in the pipeline yet (moved to Later in `/docs/mvp-scope.md`).
 5. ~~Whether work-order rates (Track A) may be seen by Procurement as well as the Vendor team.~~ **Decided: yes**, Procurement sees them.
 6. *To confirm:* Variations after design freeze. The earlier flow had them; this pipeline does not mention them. They are kept in the other docs, marked *to confirm*.
-7. *To confirm:* the Bought-in classification (above), and which scope tag opens Track B for a project with only bought-in items.
+7. *To confirm:* the Bought-in classification (above). Decided: the scope tag "Loose furniture and bought-in" opens Track B.
 8. Design frozen is the moment the docket locks (decided). There is no separate "docket locked" step.
+9. Client sign-off of GFC drawings (a submittal register) is Later; the Designer's approval is enough in v1.

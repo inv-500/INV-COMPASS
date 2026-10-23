@@ -18,7 +18,7 @@ The owner is a non-technical founder. Explain plans, trade-offs and results in p
 | --- | --- |
 | Admin | Monitors everything and acts "on behalf of" a team when needed. Users, roles, permissions, projects, payments (only role that sees amounts), finance approvals, masters, reports, close-out |
 | Designer | **The project manager.** Client brief, concept, docket, BOQ and client approvals, design freeze and release to tracks, approval of GFC drawings and release to Procurement and Factory, dispatch go-ahead, snagging, handover. Can **view every operational module** on their own projects (not finance: payments, cost sheets, PO and work-order rates), edit only where listed in `/docs/permissions.md` |
-| GFC | Final measurements, GFC drawings, BOM and engineering sheet, technical check (by a different GFC user). Does not release; the Designer does |
+| GFC | Final measurements, GFC drawings, BOM and engineering sheet, passed straight to the Designer for review (no check inside GFC). Does not release; the Designer does |
 | Procurement | BOQ verification and approval, cost sheets, PO register (the ERP creates POs; Compass stores the number and file), finance approval requests, material mobilisation, goods receipt, bought-in items, inventory |
 | Vendor team | Outsourced services (Track A): vendor selection with Procurement, work orders, scheduling, progress verification, deep cleaning. Sees work-order rates |
 | Factory | Downstream of the Designer's release and Procurement: receives released items (with GFC drawings and BOM) and raw materials, then production orders, planning, job cards, QC, packing, dispatch with packing list |
@@ -149,9 +149,10 @@ Decided:
 - **The Designer is the project manager.** There is no separate Project Manager role.
 - Payment milestones are set per project by Admin (default two); amounts are visible to Admin only.
 - Item classification has four values: Millwork, Loose furniture, Onsite service, Bought-in. "Design frozen" is the moment the docket locks.
-- Warranty and service requests, and vendor bills, are Later (not v1).
+- The scope tags are Onsite services (Track A), Millwork, and "Loose furniture and bought-in" (both open Track B).
+- There is no technical check inside GFC. GFC prepares and the Designer approves. Admin can add an optional GFC check back as a sub-task in Settings.
+- Warranty and service requests, vendor bills, and client sign-off of GFC drawings (submittal register) are Later (not v1).
 
 To confirm with the founder:
 - Bought-in classification (Track B, skips GFC and Factory production) and Variations after design freeze.
-- Which scope tag opens Track B for a project with only bought-in items.
 - Which ERP, and whether every PO needs finance approval or only those above an amount (assumed: always).
