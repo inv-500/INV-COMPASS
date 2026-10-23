@@ -172,8 +172,8 @@ Apply these when updating the repo docs. Each is a decision from the founder or 
 **`/docs/mvp-scope.md`**
 - Replace "Separate Project Manager role? (assumed no)" with the decision: **Designer is the project manager.**
 - Rename audit log to Activity.
-- Add ERP number-and-file storage in R4; ERP integration is later.
-- Move external approvals and payment milestone flags into R2/R4 as needed.
+- Add ERP number-and-file storage in R4a (Procurement); ERP integration is later.
+- Move external approvals and payment milestone flags into R2/R4a as needed.
 
 **`/docs/collaboration.md`**
 - Process tasks come from the new stage templates; reference `workflow-model.md` for statuses.
