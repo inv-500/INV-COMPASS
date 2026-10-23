@@ -9,7 +9,15 @@ const eslintConfig = defineConfig([
   // Accessibility rules (WCAG AA is a rule in CLAUDE.md): the full recommended set, not just the Next.js subset.
   {
     files: ["**/*.{jsx,tsx}"],
-    rules: jsxA11y.flatConfigs.recommended.rules,
+    rules: {
+      ...jsxA11y.flatConfigs.recommended.rules,
+      // A scrollable area must be reachable by keyboard (axe: scrollable-region-focusable), so a labelled
+      // region may take focus. This is the pattern WCAG recommends for wide tables.
+      "jsx-a11y/no-noninteractive-tabindex": [
+        "error",
+        { roles: ["tabpanel", "region"] },
+      ],
+    },
   },
   globalIgnores([
     ".next/**",

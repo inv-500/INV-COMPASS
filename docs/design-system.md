@@ -94,7 +94,7 @@ The accent green is a starting point. Confirm it (or replace it with INV Home's 
 - **Spacing:** 4 px base. Use 4, 8, 12, 16, 20, 24, 32, 40, 48, 64. Default gap inside components 8; between groups 16–24; page padding 24 (desktop), 16 (mobile).
 - **Radius:** 6 inputs and buttons; 8 cards and panels; 12 dialogs; full for pills and avatars.
 - **Elevation:** flat by default, separated by 1 px borders. Shadows only for floating layers: `shadow-sm` popovers and menus, `shadow-lg` dialogs and command palette. No gradients.
-- **Density:** table rows 40 px (comfortable) or 32 px (compact, user toggle). Inputs and buttons 32 px (36 px on touch, 44 px minimum target on mobile).
+- **Density:** table rows 40 px (comfortable) or 32 px (compact, user toggle). Inputs and buttons 32 px with a mouse, 36 px on tablets (touch, 768 px and wider), 44 px on phones (touch, under 768 px). Touch targets are never smaller than 44 px on phones.
 
 ### 2.4 Iconography and imagery
 
@@ -131,14 +131,16 @@ The accent green is a starting point. Confirm it (or replace it with INV Home's 
 └──────────────┴─────────────────────────────┴────────────────┘
 ```
 
-- **Sidebar** shows only the current role's workspace items, then pinned projects. Never show modules the user cannot access.
+- **Sidebar** shows only the current role's workspace-level items, then pinned projects: Home, Projects, My tasks, and that role's queues (for example Procurement gets BOQ to verify, PO register and Finance approvals). Project-specific screens (Requirement, BOQ builder, Docket and so on) live in tabs on the project page. The menu is built from the user's permissions, never from the role name, so nothing appears that the user cannot use. It is 56 px wide on tablets until the person expands it, and the choice is remembered on that device.
 - **Top bar**: breadcrumb, global search / command palette trigger, notifications inbox with unread count, help.
 - **Page header**: title, one line of key facts (stage, owner, due), primary action on the right (max one primary button per page).
 - **Record panel**: opening a row opens a side panel without losing the list. "Open full page" for deep work. The URL updates so panels are shareable.
 
-### 3.2 Mobile shell (On-site, Factory)
+### 3.2 Mobile shell (every role below tablet width)
 
-- Bottom navigation, max 5 items (for On-site: Today, Sites, Scan, Snags, More).
+All roles get a bottom bar below 768 px; On-site and Factory are designed phone-first.
+
+- Bottom navigation, max 5 items. On-site: Today, Sites, Scan, Snags, More. Factory: Home, Incoming, Job cards, QC, More. Every other role: Home, Projects, My tasks, Inbox, More. **More** opens the full menu, the same list the desktop sidebar shows.
 - Large page title; primary action as a full-width button at the bottom, above the nav.
 - Camera and QR scan one tap away. Works offline: queue actions, show a clear "Saved offline — will sync" banner, sync automatically.
 
@@ -162,7 +164,7 @@ Modelled on Attio and Linear list views.
 - Row selection with a floating bulk-action bar (assign, change status, export).
 - Status shown as pills; people as avatars; dates relative when recent ("in 3 days", "2 h ago") with exact date on hover.
 - Numbers right-aligned, tabular. Currency in ₹ with Indian grouping.
-- Virtualised for 1,000+ rows. Keyboard: ↑/↓ to move, Enter to open, X to select, E to edit.
+- Virtualised above 200 rows. Keyboard: ↑/↓ to move, Enter to open, X to select, E to edit.
 - States: skeleton rows while loading; helpful empty state; filtered-to-nothing state with "Clear filters".
 
 ### 4.2 Record page and panel
@@ -299,7 +301,7 @@ Each role lands on a **Home** that answers "what needs me now". Every Home also 
 
 - Interaction response < 100 ms (optimistic UI).
 - Largest contentful paint < 2.0 s on a mid-range phone over 4G.
-- Route JavaScript < 200 KB gzipped per page.
+- Route JavaScript < 200 KB gzipped per page (the scripts the page itself needs; other pages that Next.js downloads in the background are not counted). The internal `/design` page loads every component at once, is hidden on the live site, and has its own limit of 230 KB.
 - Tables over 200 rows virtualised; images lazy loaded and resized.
 
 ---
@@ -322,3 +324,10 @@ Each role lands on a **Home** that answers "what needs me now". Every Home also 
 ## 10. The `/design` page
 
 An internal page showing every token and component in both themes, with realistic INV Home content (projects, items, codes, rupee amounts). It is the visual contract: the founder approves it before feature work starts, and every later change to the system is made here first.
+
+The page is built (`src/app/design/`). It is shown on previews and local runs and is hidden (not found) on the live production site until sign-in exists. It shows each token and component in a light and a dark frame side by side, the overlays (toast with Undo, confirm dialog, menu, tooltip) with a page-wide theme switch, and the real app shell for every role at `/design/shell/<role>` with the menu built from that role's permissions. All content on it is invented sample data.
+
+**Additions to this document made while building it** (confirm on the page):
+- `border-input` colour for input borders (`border-strong` is only 1.5:1 against a card, below the 3:1 required for UI boundaries).
+- Tints for the status pills (`success-subtle` and the others), which this document names but gives no values for.
+- Select placeholders use `text-secondary` (placeholder text in an `<input>` may use `text-tertiary`).

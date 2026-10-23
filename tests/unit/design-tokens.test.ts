@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { contrast } from "@/lib/design/contrast";
+import { ALL_TOKENS } from "@/lib/design/tokens";
 
 // Guards docs/design-system.md section 2.2: "All text/background pairs must pass WCAG AA".
 const css = readFileSync(
@@ -9,7 +11,7 @@ const css = readFileSync(
 );
 
 function readTheme(selector: ":root" | ".dark") {
-  const start = css.indexOf(`${selector} {`);
+  const start = css.indexOf(selector === ":root" ? ".light {" : ".dark {");
   const block = css.slice(start, css.indexOf("}", start));
   return Object.fromEntries(
     [...block.matchAll(/--([\w-]+):\s*(#[0-9a-f]{6})/gi)].map((m) => [
@@ -17,20 +19,6 @@ function readTheme(selector: ":root" | ".dark") {
       m[2],
     ]),
   );
-}
-
-function luminance(hex: string) {
-  const [r, g, b] = [1, 3, 5].map(
-    (i) => parseInt(hex.slice(i, i + 2), 16) / 255,
-  );
-  const lin = (v: number) =>
-    v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
-  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
-}
-
-function contrast(a: string, b: string) {
-  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
-  return (hi + 0.05) / (lo + 0.05);
 }
 
 const statuses = ["success", "warning", "danger", "info", "neutral"] as const;
@@ -101,3 +89,12 @@ describe.each([":root", ".dark"] as const)(
     });
   },
 );
+
+describe("tokens shown on /design match globals.css", () => {
+  const light = readTheme(":root");
+  const dark = readTheme(".dark");
+  it.each(ALL_TOKENS)("$name", (token) => {
+    expect(light[token.name], `${token.name} light`).toBe(token.light);
+    expect(dark[token.name], `${token.name} dark`).toBe(token.dark);
+  });
+});

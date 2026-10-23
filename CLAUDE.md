@@ -156,7 +156,7 @@ Notes for the code:
 - This is Next.js 16. Read the guide in `node_modules/next/dist/docs/` before using a Next.js API (see `AGENTS.md`). The old `middleware.ts` is now `proxy.ts`; session refresh is added there in the auth step.
 - Design tokens live in `src/app/globals.css` and mirror `/docs/design-system.md`; `tests/unit/design-tokens.test.ts` fails if any text and background pair drops below WCAG AA. Fonts (Inter, JetBrains Mono) are self-hosted from npm packages.
 - shadcn components are written by hand in `src/components/ui` because the sandbox cannot reach `ui.shadcn.com`. Use only tokens, never one-off colours.
-- The `/design` showcase route and the app shell are not built yet.
+- The `/design` showcase and the app shell (`src/components/patterns/app-shell`) are built. Menus come from `src/lib/nav/nav.ts`, filtered by permissions from `src/lib/permissions/matrix.ts`, which `tests/unit/permissions-matrix.test.ts` compares with the table in `/docs/permissions.md`. `/design` is hidden on the live (production) site until sign-in exists. The shell avoids menu and dialog libraries on purpose (a small account panel, the browser's own `<dialog>` for the phone menu) to stay under the 200 KB JavaScript budget; check `pnpm test:e2e` after adding anything heavy.
 
 ## Open decisions (ask before assuming)
 

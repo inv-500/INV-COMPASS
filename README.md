@@ -16,27 +16,31 @@ pnpm dev                       # http://localhost:3000
 
 ## Settings (environment variables)
 
-| Name                                   | Secret?                  | What it is                                                                                           |
-| -------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SUPABASE_URL`             | No                       | `https://qiitpirpnqaonnzmdmhc.supabase.co`. The app refuses to start with any other project address. |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | No (public by design)    | Supabase dashboard > Project Settings > API Keys > "publishable".                                    |
-| `SUPABASE_SERVICE_ROLE_KEY`            | **Yes. Server only.**    | Supabase dashboard > Project Settings > API Keys > "secret". Not needed until the invite step.       |
+| Name                                   | Secret?               | What it is                                                                                           |
+| -------------------------------------- | --------------------- | ---------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SUPABASE_URL`             | No                    | `https://qiitpirpnqaonnzmdmhc.supabase.co`. The app refuses to start with any other project address. |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | No (public by design) | Supabase dashboard > Project Settings > API Keys > "publishable".                                    |
+| `SUPABASE_SERVICE_ROLE_KEY`            | **Yes. Server only.** | Supabase dashboard > Project Settings > API Keys > "secret". Not needed until the invite step.       |
 
 Real values live in `.env.local` (never committed) and in Vercel. A pre-commit check blocks any commit that contains a secret key, a service-role key, a database password, or an `.env` file other than `.env.example`.
 
 ## Commands
 
-| Command           | What it does                                                       |
-| ----------------- | ------------------------------------------------------------------ |
-| `pnpm dev`        | Start the app locally                                              |
-| `pnpm build`      | Make the production build                                          |
-| `pnpm typecheck`  | Check the TypeScript types                                         |
-| `pnpm lint`       | Check code quality and accessibility rules                         |
-| `pnpm format`     | Tidy the code formatting                                           |
-| `pnpm test`       | Run unit tests (Vitest)                                            |
-| `pnpm test:e2e`   | Run browser tests with an accessibility scan (Playwright)          |
+| Command          | What it does                                              |
+| ---------------- | --------------------------------------------------------- |
+| `pnpm dev`       | Start the app locally                                     |
+| `pnpm build`     | Make the production build                                 |
+| `pnpm typecheck` | Check the TypeScript types                                |
+| `pnpm lint`      | Check code quality and accessibility rules                |
+| `pnpm format`    | Tidy the code formatting                                  |
+| `pnpm test`      | Run unit tests (Vitest)                                   |
+| `pnpm test:e2e`  | Run browser tests with an accessibility scan (Playwright) |
 
 In the cloud sandbox, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/opt/pw-browsers/chromium` before `pnpm test:e2e`.
+
+## The design system page
+
+Run `pnpm dev` and open `/design`. It shows every colour, text style and component in light and dark, and the real app shell for each role at `/design/shell/<role>` (for example `/design/shell/procurement`). Everything on it is invented sample content. The page is hidden on the live production site until sign-in exists, and shown on previews and local runs.
 
 ## Preview on Vercel
 
